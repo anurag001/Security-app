@@ -1,0 +1,42 @@
+@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+@import url('https://fonts.googleapis.com/css?family=Roboto:300');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400');
+
+body{
+    background: #fff;
+    margin: 0px;
+}
+
+textarea{
+    resize:none;
+}
+.mytext{
+	color:#fff;
+}
+.myfont{
+	color:#fff;
+	font-style:arial;
+	font-weight: bold;
+	font-size:20px;
+}
+.section1{
+	margin-top: 20px;
+	padding: 5px;
+	margin-bottom: 30px;
+}
+
+
+.glow:hover{
+	color:green;
+	background:#fff;
+}
+
+.add-padding{
+	padding:10px;
+}
+
+#contact-search-result{
+	width:100%;
+	max-height: 250px;
+	overflow: auto;
+}

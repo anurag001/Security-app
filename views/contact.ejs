@@ -1,0 +1,11 @@
+<% for(var i in user){ %>
+	<div class="card">
+		<div class="card-block add-padding">
+			<h4 class="card-title"><%= user[i].name %></h4>
+			<h6 class="card-subtitle mb-2 text-muted"><%= user[i].mobile %></h6>
+			<button class="card-link btn btn-info" onclick ="callLocate('<%= user[i]._id %>')" data-toggle="modal" data-target="#mapModal">Locate</button>
+			<a class="btn btn-primary" href="tel:<%= user[i].mobile %>">Call</a>
+		</div>
+	</div>
+	&nbsp;
+<% } %>

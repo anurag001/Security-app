@@ -1,0 +1,18 @@
+<% for(var i in user){ %>
+	<div class="card">
+		<div class="card-block add-padding">
+			<h4 class="card-title"><%= user[i].name %></h4>
+			<h6 class="card-subtitle mb-2 text-muted"><%= user[i].mobile %></h6>
+			<% if(status == 2) { %>
+				<button class="card-link btn btn-warning">Request Sent</button>
+
+			<% }else if(status == 1){ %>
+					<button class="card-link btn btn-primary">Connected</button>
+
+			<% }else{ %>
+					<button onclick="add('<%= user[i]._id %>')" id="add<%= user[i]._id %>" class="card-link btn btn-warning">Add to Contact</button>
+
+			<% } %>
+		</div>
+	</div>
+<% } %>

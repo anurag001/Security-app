@@ -1,0 +1,24 @@
+        <% for(var x in feed){ %>
+				<div class="post1-container" id="feed<%= feed[x]._id %>" style="border:2px solid #ddd;background:#fff;padding:5px; ">
+                    <div class="post1-question">
+                    <% if(feed[x].feedStatus=="video"){ %>
+                       <div class="embed-responsive embed-responsive-16by9">
+							<iframe style="max-width:inherit;max-height:300;" class="embed-responsive-item" src="https://www.youtube.com/embed/<%= feed[x].feedData %>" frameborder="0" allowfullscreen></iframe>
+						</div>
+					<% }else{ %>
+							<%= feed[x].feedData %>
+					<% } %>
+                    </div>
+                    <div class="post-details">
+                        <span style="cursor:pointer;"><i class="fa fa-eye btn btn-secondary" onclick="genuineRequest('<%= feed[x]._id %>')"></i>&nbsp;</span>&nbsp;
+                        <span class="btn btn-danger" style="cursor:pointer;"><i onclick="removeFeed('<%= feed[x]._id %>')" class="fa fa-close"></i></span>
+                        &nbsp;
+                        <% if(feed[x].feedStatus=="text"){ %>
+                            <button class="btn text-center btn-warning" value="<%= feed[x].feedData %>" onclick="getAction(this.value,'result<%= feed[x]._id %>')" style="width:auto;height:auto;">Get</button>
+                        <% } %>
+                    </div>
+                    <div id="result<%= feed[x]._id %>" style="word-wrap:break-word;">
+                    </div>
+                </div>
+				<br>
+			<%}%>

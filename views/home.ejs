@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<%include ./assets/header %>
+		<link href="./css/style.css" rel="stylesheet">
+		<style type="text/css">
+		</style>
+	</head>
+	<body>
+		<nav class="navbar bg-success">
+			<div class="container">
+				<div class="row">
+					<div class="col-auto mr-auto">
+						<a class="navbar-brand" href="/">
+							<span class="myfont">Eye: <%= user[0].name %></span>
+						</a>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-auto mr-auto">
+						 <audio class="audioDemo" preload="none">
+						  <source id="audio-voice" src="" type="audio/mpeg">
+						</audio> 
+						<button class="btn btn-outline-light glow" data-target="#notificationModal" data-toggle="modal" id="node">^</button>
+						<button class="btn btn-outline-light glow" data-target="#notifyModal" data-toggle="modal">I'm in Danger</button>
+						&nbsp;
+						<a href="/feed" class="btn btn-outline-light glow">Feed</a>
+						&nbsp;
+						<a href="/logout" class="btn btn-outline-light glow">Log Out</a>
+					</div>
+				</div>
+			</div>
+		</nav>
+		
+		<br>
+		<br>
+
+		<section class="section1">
+			<div class="container">
+				<div class="row">
+					
+					<div class="col-lg-4">
+						<h4 class="display-4">Search</h4>
+						<br>
+						<form method="post" id="contact-search">
+							<input type="tel" id="mobile" class="form-control" placeholder="Search by mobile no" required="required">
+							<br>
+							<input type="submit" id="search-btn" class="btn btn-success" value="Search Contacts">
+						</form>
+						<br>
+						<div id="contact-search-result"></div>
+					</div>
+					<div class="col-lg-4">
+						<h4 class="display-4">Contacts</h4>
+						<br>
+						<div id="contact-result"></div>
+					</div>
+					<div class="col-lg-4">
+						<h4 class="display-4">Requests</h4>
+						<br>
+						<div id="request-result"></div>
+					</div>
+
+				</div>
+			</div>
+		</section>
+		
+		<br>
+		<br>
+
+		<section>
+			<div class="container">
+				<div class="row">
+					<div id="result">
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Modal -->
+		<div class="modal fade" id="mapModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="width:100%;max-height:500px;overflow: auto;">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel">Map</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body" id="map-disp" style="height: 400px;">
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+		<!-- Modal -->
+		<div class="modal fade" id="notifyModal" tabindex="-1" role="dialog" aria-labelledby="notifyModalLabel" aria-hidden="true" style="width:100%;max-height:300px;overflow:auto;">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="notifyModalLabel">Notify my contacts</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body" style="height: 150px;">
+		      		By clicking on button, your contacts will be notified about you.
+		      		<button class="btn btn-success" onclick="notify()">Notify my Contacts</button>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+		<div class="modal fade" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="notificationModalLabel" aria-hidden="true" style="width:100%;max-height:300px;overflow:auto;">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="notificationModalLabel">Notification</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body" id="notification-view" style="height: 150px;">
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+		<div class="demo"></div>
+
+		<br>
+		<%include ./assets/footer %>
+
+	</body>
+	<script type="text/javascript">
+		
+		var long=0;
+		var lat=0;
+
+		function getLocation() 
+		{
+		    if (navigator.geolocation)
+		    {
+				navigator.geolocation.getCurrentPosition(showPosition,showError);
+		    }
+		    else
+		    { 
+		    	alert("Geolocation is not supported by this browser.");
+		    }
+		}
+
+		function showPosition(position) {
+		    long =  position.coords.latitude;
+		    lat =  position.coords.longitude;
+		    
+		    var location = {
+				long:long,
+				lat:lat
+			};
+
+			$.ajax({
+				type:"POST",
+				url:"/get/location",
+				data:location,
+				beforeSend: function(){
+				},
+				success: function(){
+					
+				},
+				error: function(data){
+					console.log(data.responseText);
+				}
+			});
+		}
+
+		function showError(error) 
+		{
+		    switch(error.code) 
+		    {
+		        case error.PERMISSION_DENIED:
+		            alert("User denied the request for Geolocation.");
+		            break;
+		        case error.POSITION_UNAVAILABLE:
+		            alert("Location information is unavailable.");
+		            break;
+		        case error.TIMEOUT:
+		            alert("The request to get user location timed out.");
+		            break;
+		        case error.UNKNOWN_ERROR:
+		            alert("An unknown error occurred.");
+		            break;
+	        }
+    	}
+
+    	var id, target, options;
+
+		function success(pos) 
+		{
+			var crd = pos.coords;
+
+				var location = {
+					long:crd.latitude,
+					lat:crd.longitude
+				};
+				
+				$(".demo").html(JSON.stringify(location));
+
+				$.ajax({
+					type:"POST",
+					url:"/get/location",
+					data:location,
+					success: function(){
+						console.log('Changed');
+					},
+					error: function(data){
+						console.log(data.responseText);
+					}
+				});
+
+				//navigator.geolocation.clearWatch(id);
+			
+		}
+
+		function error(err) 
+		{
+			console.warn('ERROR(' + err.code + '): ' + err.message);
+		}
+
+
+		options = {
+			enableHighAccuracy: false,
+			timeout: 5000,
+			maximumAge: 0
+		};
+
+		id = navigator.geolocation.watchPosition(success, error, options);
+
+		function contact()
+		{
+			$.ajax({
+				type:"post",
+				url:"/contact",
+				success: function(data){
+					$("#contact-result").html(data);
+				},
+				error: function(data){
+					console.log(data);
+				}
+			});
+		}
+
+		function request()
+		{
+			$.ajax({
+				type:"post",
+				url:"/request",
+				success: function(data){
+					$("#request-result").html(data);
+				},
+				error: function(data){
+					console.log(data);
+				}
+			});
+		}
+
+		function callLocate(id)
+		{
+			$.ajax({
+				type:"post",
+				url:"/showmap",
+				data:{id:id},
+				success: function(data){
+					//console.log(data);
+					//$("#map-disp").html(data);
+					repositionMarker(data);
+								//setTimeout(callLocate(id),2000);
+
+				},
+				error: function(data){
+					console.log(data);
+				}
+			});
+
+		}
+		
+		// function displayFeed()
+		// {
+		// 	var location = {
+		// 		long:long,
+		// 		lat:lat
+		// 	};
+		// 	$.ajax({
+		// 		type:"POST",
+		// 		url:"/display/feed",
+		// 		data:location,
+		// 		success: function(data){
+		// 			$("#feed-display").html(data);
+		// 		},
+		// 		error: function(data){
+		// 			console.log(data);
+		// 		}
+		// 	});
+		// }
+
+		$("#contact-search").on("submit",function(e){
+			e.preventDefault();
+
+			var mobile = $("#mobile").val();
+			var data = {mobile:mobile};
+
+			$.ajax({
+				type:"post",
+				url:"/search",
+				data:data,
+				success: function(data){
+					$("#contact-search-result").html(data);
+				},
+				error: function(data){
+					console.log(data.responseText);
+				}
+			});
+
+		});
+			
+		function add(id)
+		{
+			var data={to:id};
+			$.ajax({
+				type:"post",
+				url:"/add",
+				data:data,
+				success: function(data){
+					if(data == "ok")
+					{
+						$("#add"+id).html("Request Sent");
+					}
+				},
+				error: function(data){
+					console.log(data);
+				}
+			});
+		}
+			
+		function approve(id)
+		{
+			var data={from:id};
+			$.ajax({
+				type:"post",
+				url:"/approve",
+				data:data,
+				success: function(data){
+					if(data == "ok")
+					{
+						$("#approve"+id).removeClass("btn-warning");
+						$("#approve"+id).addClass("btn-primary");
+						$("#approve"+id).html("Connected");
+						contact();
+					}
+				},
+				error: function(data){
+					console.log(data);
+				}
+		
+			});
+		}
+
+		function notify()
+		{
+			$.ajax({
+				type:"post",
+				url:"/notify",
+				success: function(data){
+					alert(data);
+				},
+				error: function(data){
+					console.log(data);
+				}
+		
+			});
+		}
+
+		function pullNotification()
+		{
+			$.ajax({
+				type:"post",
+				url:"/pull/notification",
+				success: function(data){
+					if(data.length!=0)
+					{
+						console.log(data);
+						var c=0;
+						var str="";
+						for(var i in data)
+						{
+							str = str + '<div id="'+data[i]._id+'"' ;
+							if(data[i].status==1)
+							{
+								c++;
+								str += 'style="background:#cde7f0;display:inline-block;"><p style="color:#000">'+data[i].message+'</p></div><button style="background:#cde7f0;display:block;text-align:right;float:right;cursor:pointer;" class="btn text-center" onclick="muteNotification('+data[i]._id+')">!</button><hr>';
+							}
+							else
+							{
+								'><p style="color:#000">'+data[i].message+'</p></div><hr>';
+							}
+						}
+						$("#notification-view").html(str);
+						if(c!=0)
+						{
+							$("#node").html('<div style="background:red;color:#fff;border-radius:50px;width:25px;height:25px;" class="text-center">'+c+'</div>');
+							$("#audio-voice").attr("src","http://soundbible.com/mp3/BOMB_SIREN-BOMB_SIREN-247265934.mp3");
+							$(".audioDemo").trigger('load');
+							//starts playing
+							$(".audioDemo").trigger('play');
+
+						}
+					}
+				},
+				error: function(data){
+					console.log(data);
+				}
+		
+			});
+		}
+
+		function muteNotification(nid)
+		{
+			$.ajax({
+				type:"post",
+				url:"/mute/notification",
+				data:{nid:nid},
+				success: function(data){
+					if(data=="ok")
+					{
+						$("#"+nid).css("background","#fff");
+						$("#audio-voice").attr("src","#");
+						//pause playing
+						$(".audioDemo").trigger('pause');
+					}
+				},
+				error: function(data){
+					console.log(data);
+				}
+		
+			});
+		}
+
+		//Google map integration---------------------
+
+		//map
+
+		
+
+
+		window.onload = function(){
+			getLocation();
+			contact();
+			request();
+			pullNotification();
+		};
+		
+		var marker, map;
+
+		function initMap() 
+		{
+			  
+			  map = new google.maps.Map(document.getElementById('map-disp'), {
+			    zoom: 15,
+			    center: {lat:22,lng:88}
+			  });
+
+				// Construct the circle for each value in citymap.
+				// Note: We scale the area of the circle based on the population.
+				// Add the circle for this city to the map.
+
+			// var cityCircle = new google.maps.Circle({
+		 //      strokeColor: '#FF0000',
+		 //      strokeOpacity: 0.8,
+		 //      strokeWeight: 2,
+		 //      fillColor: '#FF0000',
+		 //      fillOpacity: 0.35,
+		 //      map: map,
+		 //      center: {lat:22,lng:88},
+		 //      radius: 10000
+		 //    });
+
+
+	        marker = new google.maps.Marker({
+	          position: {lat:22,lng:88},
+	          map: map,
+	          title: 'Hello World!'
+	        });
+
+	        marker.setMap(map);
+
+		}
+
+		function repositionMarker(posArr){
+			//remove any existing marker
+			marker ? marker.setMap(null) : void(0);
+			pos = {
+				lat: posArr[0].location.coordinates[0],
+				lng: posArr[0].location.coordinates[1],
+			}
+
+			//create new marker
+	        marker = new google.maps.Marker({
+	          position: pos,
+	          map: map,
+	          title: 'Hello World!'
+	        });
+
+	        //setting marker to map
+	        marker.setMap(map);
+
+			//console.log(pos);
+			//console.log(marker.getPosition().lat());
+
+			//real time calling
+			marker.setPosition(pos);
+			//console.log(marker.getPosition().lat());
+			//console.log(marker.getPosition().lng());
+			//marker.setMap(map);
+			map.setCenter(marker.getPosition());
+		}
+
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=<key>&callback=initMap"></script>
+
+ </html>

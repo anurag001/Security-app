@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<%include ./assets/header %>
+		<link href="./css/style.css" rel="stylesheet">
+	</head>
+	<body>
+		<%include ./assets/navbar %>
+		
+
+		<section class="section1">
+			<div class="container">
+				<div class="row">
+						
+					<div class="col-lg-6">
+						<form method="post" id="reg-form">
+							<legend>Create your account</legend>
+							<span id="reg-info"></span>
+							<div class="form-group">
+								<label>Full Name</label>
+								<input type="text" class="form-control" id="fullname" maxlength="25" name="fullname" placeholder="Full Name" autocomplete="on" required>
+							</div>
+							<div class="form-group">
+								<label>Mobile No.</label>
+								<input type="tel" class="form-control" id="mobile" name="mobile"  placeholder="Mobile" autocomplete="on" required>
+							</div>
+							<div class="form-group">
+								<label>Password</label>
+								<input type="password" class="form-control" id="password" maxlength="30" name="password" placeholder="Password" autocomplete="off" required>
+							</div>
+							<button type="submit" class="btn btn-success btn-lg" style="margin-top: 15px;" id="register-btn">Sign Up</button>
+						</form>
+					</div>
+
+					<div class="col-lg-6">
+						<form method="post" id="login-form">
+							<legend>Login to your account</legend>
+							<span id="log-info"></span>
+							<div class="form-group">
+								<label>Mobile No.</label>
+								<input type="tel" class="form-control" id="logmobile" name="logmobile" placeholder="Mobile No." autocomplete="on" required>
+							</div>
+							<div class="form-group">
+								<label>Password</label>
+								<input type="password" class="form-control" id="logpass" name="logpass" placeholder="Password" autocomplete="off" required>
+								<span id="login-info"></span>
+							</div>
+							<button type="submit" class="btn btn-success btn-lg" style="margin-top: 15px;" id="login-btn">Sign In</button>
+						</form>
+					</div>
+
+				</div>
+			</div>
+		</section>
+		
+		<br>
+		<br>
+
+		<%include ./assets/footer %>
+	</body>
+	<script type="text/javascript" src="./js/signform.js"></script>
+
+ </html>

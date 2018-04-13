@@ -1,0 +1,10 @@
+<% for(var i in user){ %>
+	<div class="card">
+		<div class="card-block add-padding">
+			<h4 class="card-title"><%= user[i].name %></h4>
+			<h6 class="card-subtitle mb-2 text-muted"><%= user[i].mobile %></h6>
+			<button class="card-link btn btn-warning" onclick="approve('<%= user[i]._id %>')" id="approve<%= user[i]._id %>">Approve</button>
+		</div>
+	</div>
+	&nbsp;
+<% } %>
